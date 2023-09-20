@@ -9,14 +9,17 @@ const APIurl = "https://2u-data-curriculum-team.s3.amazonaws.com/dataviz-classro
 
 d3.text(APIurl).then(function(APIresponse) {
     
-    var allData = JSON.parse(APIresponse);
+    const allData = JSON.parse(APIresponse);
     console.log("Dataset as JSON object: ", allData);
 
     const idList = allData.names;
     console.log(`ID list: ${idList}`);
 
-    let samplesList = allData.samples;
+    const samplesList = allData.samples;
     console.log(`Samples list: ${samplesList}`);
+
+    const demographicsList = allData.metadata;
+    console.log(`Demographics/metadata list: ${demographicsList}`);
 
     
 
@@ -133,6 +136,22 @@ d3.text(APIurl).then(function(APIresponse) {
 
         // render plot to <div id="bubble"≥
         Plotly.newPlot("bubble", bubbleTraces, bubbleLayout);
+
+
+
+
+
+        ///// Displaying Demographic Info / Metadata
+
+        // get demographic data for the selected sample/individual ID
+        var selectedDemographics = demographicsList.filter(sample => sample.id == selectedID)[0];
+        console.dir(`Selected ID's demographics/metadata: ${JSON.stringify(selectedDemographics)}`);
+
+
+        let demographicsDisplay = d3.select("#sample-metadata").node();
+        demographicsDisplay.innerHTML = JSON.stringify(selectedDemographics, undefined, 2);
+
+
 
 
 
