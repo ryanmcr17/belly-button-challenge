@@ -50,6 +50,10 @@ d3.text(APIurl).then(function(APIresponse) {
         var selectedSample = samplesList.filter(sample => sample.id == selectedID)[0];
         console.dir(`Selected ID's sample/data: ${selectedSample.values}`);
 
+
+
+        ///// Bar Chart
+
         // define arrays containing OTU IDs, OTU labels, and sample values for top 10 OTUs by sample value
         var top10OTUIDs = selectedSample.otu_ids.slice(0,10).map(x => "OTU " + x).reverse();
         var top10OTUlabels = selectedSample.otu_labels.slice(0,10).reverse();
@@ -61,7 +65,7 @@ d3.text(APIurl).then(function(APIresponse) {
         console.log(`Sample values for top 10 OTUs by sample value: ${top10OTUvalues}`);
 
         // define trace for horizontal bar chart
-        var trace1 = {
+        var barTrace1 = {
             x: top10OTUvalues,
             y: top10OTUIDs,
             text: top10OTUlabels,
@@ -71,11 +75,11 @@ d3.text(APIurl).then(function(APIresponse) {
         };
 
         // set traces/data to be plotted
-        var traces = [trace1];
+        var barTraces = [barTrace1];
 
         // set layout
-        var layout = {
-        title: "Top 10 OTUs by sample value",
+        var barLayout = {
+        title: "Top 10 OTUs by Sample Value",
         margin: {
             l: 100,
             r: 100,
@@ -85,7 +89,53 @@ d3.text(APIurl).then(function(APIresponse) {
         };
 
         // render plot to <div id="bar"≥
-        Plotly.newPlot("bar", traces, layout);
+        Plotly.newPlot("bar", barTraces, barLayout);
+
+
+       
+        ///// Bubble Chart 
+
+        // define arrays containing OTU IDs, OTU labels, and sample values for all OTUs for the selected sample/ID
+        var allOTUIDs = selectedSample.otu_ids;
+        var allOTUlabels = selectedSample.otu_labels;
+        var allOTUvalues = selectedSample.sample_values;
+
+        // log to the console
+        console.log(`All OTU IDs for the selected sample/ID: ${allOTUIDs}`);
+        console.log(`All OTU labels for the selected sample/ID: ${allOTUlabels}`);
+        console.log(`All sample values for the selected sample/ID: ${allOTUvalues}`);
+
+        // define trace/data for bubble bar chart
+        var bubbleTrace1 = {
+            x: allOTUIDs,
+            y: allOTUvalues,
+            mode: 'markers',
+            marker: {
+                size: allOTUvalues,
+                color: allOTUIDs
+            },
+            text: allOTUlabels,
+        };
+
+        // set traces/data to be plotted
+        var bubbleTraces = [bubbleTrace1];
+
+        // set layout
+        var bubbleLayout = {
+        title: "Sample Values for all OTU IDs",
+        margin: {
+            l: 100,
+            r: 100,
+            t: 100,
+            b: 100
+        }
+        };
+
+        // render plot to <div id="bubble"≥
+        Plotly.newPlot("bubble", bubbleTraces, bubbleLayout);
+
+
+
 
     // closing definition of dropdownSelection() function
     }
